@@ -18,7 +18,111 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
+/* --- Enhanced About layout & animations --- */
 
+/* 更顯眼的兩欄配置（覆蓋原本兩欄寬度） */
+.enhanced-two-col {
+  display: grid;
+  grid-template-columns: 1fr 480px; /* 右欄放大為 480px */
+  gap: 32px;
+  align-items: start;
+}
+
+/* 內容區塊微調 */
+.content-block .section-title {
+  font-family: "Playfair Display", serif;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+/* 右側視覺區塊 */
+.visual-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* 圖片容器，提供陰影與圓角 */
+.hero-image-wrap {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(107,66,38,0.12);
+  background: linear-gradient(180deg,#fff 0%, #fffaf6 100%);
+  transform-origin: center;
+}
+
+/* 主視覺圖片：放大、懸停微動、載入淡入 */
+.hero-image {
+  width: 100%;
+  height: 420px; /* 放大高度 */
+  object-fit: cover;
+  display: block;
+  transition: transform 350ms cubic-bezier(.2,.9,.2,1), filter 300ms;
+  transform: scale(1);
+  filter: saturate(1);
+  opacity: 0;
+  animation: fadeInUp 520ms ease forwards;
+}
+
+/* 懸停或聚焦時微放大（也適用鍵盤 focus） */
+.hero-image-wrap:hover .hero-image,
+.hero-image:focus {
+  transform: scale(1.03);
+  filter: saturate(1.05);
+  outline: none;
+}
+
+/* 人物區塊文字 */
+.about-person-title {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  color: var(--brand);
+  margin-bottom: 6px;
+}
+.about-person-text {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 文字淡入上移效果（分段延遲可用 inline style 調整） */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeInUp 420ms ease forwards;
+}
+
+/* 圖片載入完成後確保 opacity=1（避免閃爍） */
+.hero-image[loading="lazy"] {
+  will-change: opacity, transform;
+}
+
+/* 可及性：明顯 focus 樣式 */
+a:focus, button:focus, .hero-image:focus {
+  box-shadow: 0 0 0 3px rgba(250,218,221,0.6);
+  border-radius: 8px;
+}
+
+/* 響應式：窄螢幕時圖片高度與欄位堆疊 */
+@media (max-width: 980px) {
+  .enhanced-two-col {
+    grid-template-columns: 1fr;
+  }
+  .hero-image {
+    height: 320px;
+  }
+  .hero-image-wrap { order: -1; } /* 圖片先顯示於上方 */
+}
+
+/* 更窄裝置微調 */
+@media (max-width: 560px) {
+  .hero-image { height: 220px; }
+  .enhanced-two-col { gap: 18px; }
+}
     /* Container */
     .site {
       display:flex;
